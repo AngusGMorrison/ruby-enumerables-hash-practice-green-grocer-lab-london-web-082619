@@ -22,15 +22,18 @@ def apply_coupons(cart, coupons)
     #Check cart is eligible for coupon
     if cart.has_key?(coupon[:item]) && cart[coupon[:item]][:count] >= coupon[:num]
       name_w_coupon = "#{coupon[:item]} W/COUPON"
+      #Check if coupon has already been applied. If so, increment.
       if cart.has_key?(name_w_coupon)
         cart[name_w_coupon][:count] += coupon[:num]
       else
+        #Create new coupon entry
         cart[name_w_coupon] = {
           price: (coupon[:cost] / coupon[:num]),
           clearance: cart[coupon[:item]][:clearance],
           count: coupon[:num]
         }
       end
+      #Reduce count of undiscounted food
       cart[coupon[:item]][:count] -= coupon[:num]
     end
   end
