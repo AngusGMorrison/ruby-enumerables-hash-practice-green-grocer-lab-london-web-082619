@@ -1,9 +1,12 @@
 def consolidate_cart(cart)
   cart_hash = {}
+  #For each hash in the cart array...
   cart.each do | item |
+    #If the new hash has that key already, increment its value's count key
     if cart_hash[item.keys[0]]
       cart_hash[item.keys[0]][:count] += 1
     else
+      #Create a new entry with that key, and set its count to 1
       cart_hash[item.keys[0]] = {
         price: item.values[0][:price],
         clearance: item.values[0][:clearance],
@@ -16,11 +19,13 @@ end
 
 def apply_coupons(cart, coupons)
   coupons.each do | coupon |
+    #Check cart is eligible for coupon
     if cart.has_key?(coupon[:item]) && cart[coupon[:item]][:count] >= coupon[:num]
-      if cart.has_key?("#{coupon[:item]} W/COUPON")
-        cart["#{coupon[:item]} W/COUPON"][:count] += coupon[:num]
+      name_w_coupon = "#{coupon[:item]} W/COUPON"
+      if cart.has_key?(name_w_coupon)
+        cart[name_w_coupon][:count] += coupon[:num]
       else
-        cart["#{coupon[:item]} W/COUPON"] = {
+        cart[name_w_coupon] = {
           price: (coupon[:cost] / coupon[:num]),
           clearance: cart[coupon[:item]][:clearance],
           count: coupon[:num]
